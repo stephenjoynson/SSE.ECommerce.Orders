@@ -1,14 +1,10 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SSE.ECommerce.Orders.Data.Configuration;
 
 namespace SSE.ECommerce.Orders
 {
@@ -24,6 +20,20 @@ namespace SSE.ECommerce.Orders
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // TODO: Ensure you have included the values for the required settings in appsettings
+            services.Configure<OrdersSettings>(Configuration.GetSection("OrdersSettings"));
+            var ordersSettings = new OrdersSettings();
+            Configuration.GetSection("OrdersSettings").Bind(ordersSettings);
+
+            // Configure HTTP Client for the Customer API
+            // TODO: For Production Release also configure retry and circuit breaker policies
+            services.AddHttpClient<ICustomerService, CustomerService>(client =>
+            {
+                client.BaseAddress = new Uri(ordersSettings.CustomerApiUrl);
+            });
+                //.AddPolicyHandler(GetRetryPolicy())
+                //.AddPolicyHandler(GetCircuitBreakerPolicy());
+
             services.AddControllers();
         }
 

@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readme.md = readme.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSE.ECommerce.Orders.Data", "SSE.ECommerce.Orders.Data\SSE.ECommerce.Orders.Data.csproj", "{C8A5B6E8-5E00-4F5C-80ED-2C23E863F34C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{7A44E09F-4AE6-4A6E-864F-D5CA3ECF765D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A44E09F-4AE6-4A6E-864F-D5CA3ECF765D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A44E09F-4AE6-4A6E-864F-D5CA3ECF765D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A5B6E8-5E00-4F5C-80ED-2C23E863F34C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A5B6E8-5E00-4F5C-80ED-2C23E863F34C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A5B6E8-5E00-4F5C-80ED-2C23E863F34C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A5B6E8-5E00-4F5C-80ED-2C23E863F34C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
