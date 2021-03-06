@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SSE.ECommerce.Orders.Data\SSE.ECommerce.Orders.Data.csproj" />
+    <ProjectReference Include="..\SSE.ECommerce.Orders.Domain\SSE.ECommerce.Orders.Domain.csproj" />
+    <ProjectReference Include="..\SSE.ECommerce.Proxy\SSE.ECommerce.Orders.Proxy.csproj" />
   </ItemGroup>
 
 

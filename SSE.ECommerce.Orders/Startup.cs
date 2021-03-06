@@ -5,6 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SSE.ECommerce.Orders.Data.Configuration;
+using SSE.ECommerce.Orders.Data.Interfaces;
+using SSE.ECommerce.Orders.Data.Services;
+using SSE.ECommerce.Orders.Domain.Interfaces;
+using SSE.ECommerce.Orders.Domain.Managers;
+using SSE.ECommerce.Orders.Proxy.Interfaces;
+using SSE.ECommerce.Orders.Proxy.Proxies;
 
 namespace SSE.ECommerce.Orders
 {
@@ -27,12 +33,18 @@ namespace SSE.ECommerce.Orders
 
             // Configure HTTP Client for the Customer API
             // TODO: For Production Release also configure retry and circuit breaker policies
-            services.AddHttpClient<ICustomerService, CustomerService>(client =>
+            services.AddHttpClient<ICustomerService, CustomerService>("Customer", client =>
             {
                 client.BaseAddress = new Uri(ordersSettings.CustomerApiUrl);
+                client.DefaultRequestHeaders.Add("code", ordersSettings.CustomerApiKey);
             });
-                //.AddPolicyHandler(GetRetryPolicy())
-                //.AddPolicyHandler(GetCircuitBreakerPolicy());
+            //.AddPolicyHandler(GetRetryPolicy())
+            //.AddPolicyHandler(GetCircuitBreakerPolicy());
+
+            // Configure DI
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICustomerManager, CustomerManager>();
+            services.AddScoped<IMostRecentOrderSummaryProxy, MostRecentOrderSummaryProxy>();
 
             services.AddControllers();
         }
