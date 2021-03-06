@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace SSE.ECommerce.Orders.Controllers
@@ -14,10 +15,13 @@ namespace SSE.ECommerce.Orders.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public string Get()
+        [HttpPost]
+        [Route("api/v1/orders/mostrecentordersummary")]
+        // TODO: Configure Production Ready Authorization
+        // [Authorize]
+        public string MostRecentOrderSummary()
         {
-            _logger.LogInformation("Start of Get()");
+            _logger.LogInformation("Start of MostRecentOrderSummary()");
             return string.Empty;
         }
     }

@@ -37,6 +37,8 @@ namespace SSE.ECommerce.Orders
 
             app.UseRouting();
 
+            // TODO: Configure Production Ready Authentication and Authorization 
+            // app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
