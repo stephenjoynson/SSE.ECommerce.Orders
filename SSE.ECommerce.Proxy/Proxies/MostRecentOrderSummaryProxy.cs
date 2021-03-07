@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SSE.ECommerce.Orders.Domain.Interfaces;
@@ -35,10 +32,11 @@ namespace SSE.ECommerce.Orders.Proxy.Proxies
             {
                 Customer = new Customer
                 {
+                    CustomerId = customer.CustomerId,
                     FirstName = customer.FirstName,
-                    LastName = customer.LastName
+                    LastName = customer.LastName,
                 },
-                Order = new Order
+                Order = order != null ? new Order
                 {
                     OrderNumber = order.OrderId,
                     OrderDate = order.OrderDate.ToString("dd-MMM-yyyy"),
@@ -50,7 +48,7 @@ namespace SSE.ECommerce.Orders.Proxy.Proxies
                         PriceEach = orderItem.Price
                     }).ToList(),
                     DeliveryExpected = order.DeliveryExpected.ToString("dd-MMM-yyyy")
-                }
+                } : null
             };
         }
     }

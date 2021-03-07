@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SSE.ECommerce.Orders.Data.DTO
+﻿namespace SSE.ECommerce.Orders.Data.DTO
 {
     public class OrderDetailsDto
     {

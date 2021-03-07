@@ -17,11 +17,5 @@ namespace SSE.ECommerce.Orders.Data.Services
             { DbConnection.Open(); }
 
         }
-
-        protected void EnsureDbConnectionIsClosed()
-        {
-            if (DbConnection.State != ConnectionState.Closed)
-            { DbConnection.Close(); }
-        }
     }
 }

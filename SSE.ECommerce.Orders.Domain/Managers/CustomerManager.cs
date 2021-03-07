@@ -23,12 +23,13 @@ namespace SSE.ECommerce.Orders.Domain.Managers
             var customerDetails = await _customerService.GetCustomerDetails(email);
             return new Customer
             {
-                FirstName = customerDetails.FirstName,
-                LastName = customerDetails.LastName,
-                HouseNumber = customerDetails.HouseNumber,
-                Street = customerDetails.Street,
-                Town = customerDetails.Town,
-                Postcode = customerDetails.Postcode
+                CustomerId = customerDetails?.CustomerId,
+                FirstName = customerDetails?.FirstName,
+                LastName = customerDetails?.LastName,
+                HouseNumber = customerDetails?.HouseNumber,
+                Street = customerDetails?.Street,
+                Town = customerDetails?.Town,
+                Postcode = customerDetails?.Postcode
             };
         }
     }

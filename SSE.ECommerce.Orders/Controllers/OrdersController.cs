@@ -22,10 +22,18 @@ namespace SSE.ECommerce.Orders.Controllers
         [Route("api/v1/orders/mostrecentordersummary")]
         // TODO: Configure Production Ready Authorization
         // [Authorize]
-        public OrderSummaryResponse MostRecentOrderSummary([FromBody] OrderRequest orderRequest)
+        public IActionResult MostRecentOrderSummary([FromBody] OrderRequest orderRequest)
         {
             _logger.LogInformation("Start of MostRecentOrderSummary()");
-            return _mostRecentOrderSummaryProxy.GetMostRecentOrderSummary(orderRequest).Result;
+            var response = _mostRecentOrderSummaryProxy.GetMostRecentOrderSummary(orderRequest).Result;
+
+            if (response.Customer.CustomerId == orderRequest.CustomerId)
+            {
+                return Ok(response);
+            }
+
+            _logger.LogWarning($"Bad Request for {orderRequest.User} {orderRequest.CustomerId}");
+            return BadRequest();
         }
     }
 }

@@ -1,12 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace SSE.ECommerce.Orders.Proxy.Models
 {
     public class Customer
     {
-        [JsonProperty("firstName")]
+        [JsonIgnore]
+        public string CustomerId { get; set; }
+        [JsonPropertyName("firstName")]
         public string FirstName { get; set; }
-        [JsonProperty("lastName")] 
+        [JsonPropertyName("lastName")] 
         public string LastName { get; set; }
     }
 }

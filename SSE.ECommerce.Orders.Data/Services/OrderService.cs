@@ -51,12 +51,12 @@ namespace SSE.ECommerce.Orders.Data.Services
                 AND o.[ORDERID] = (SELECT TOP 1 [ORDERID] FROM [ORDERS] WHERE [CUSTOMERID] = @customerId ORDER BY [ORDERDATE] DESC)";
 
             var results = await DbConnection.QueryAsync<OrderDetailsDto, OrderDto, OrderItemDto, ProductDto, OrderDetailsDto>(query,
-                (orderdetails, order, orderitem, product) =>
+                (orderDetails, order, orderItem, product) =>
                 {
-                    orderdetails.Order = order;
-                    orderdetails.OrderItem = orderitem;
-                    orderdetails.Product = product;
-                    return orderdetails;
+                    orderDetails.Order = order;
+                    orderDetails.OrderItem = orderItem;
+                    orderDetails.Product = product;
+                    return orderDetails;
                 }, new
                 {
                     customerId
