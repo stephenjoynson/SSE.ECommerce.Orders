@@ -1,9 +1,11 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SSE.ECommerce.Orders.Data.DTO;
 using SSE.ECommerce.Orders.Data.Interfaces;
+using SSE.ECommerce.Orders.Data.Models;
 
 namespace SSE.ECommerce.Orders.Data.Services
 {
@@ -11,18 +13,20 @@ namespace SSE.ECommerce.Orders.Data.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<CustomerService> _logger;
+        private readonly IConfiguration _configuration;
 
-        public CustomerService(IHttpClientFactory httpClientFactory, ILogger<CustomerService> logger)
+        public CustomerService(IHttpClientFactory httpClientFactory, ILogger<CustomerService> logger, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<CustomerDto> GetCustomerDetails(string email)
         {
             _logger.LogInformation($"About to call Customer API for {email}");
             var customerClient = _httpClientFactory.CreateClient("Customer");
-            var requestUri = "api/GetUserDetails?code=uu2ToG/dcsg3DI8CGlpLro1PyLhZNUWHpdPv8VmWFLBaxM0fvUZvkA==";
+            var requestUri = $"api/GetUserDetails?code={_configuration["OrdersSettings:CustomerApiKey"]}";
             var customerRequest = new CustomerRequest
             {
                 Email = email
@@ -32,6 +36,5 @@ namespace SSE.ECommerce.Orders.Data.Services
             var customerDetails = JsonConvert.DeserializeObject<CustomerDto>(httpResponseString);
             return customerDetails;
         }
-
     }
 }

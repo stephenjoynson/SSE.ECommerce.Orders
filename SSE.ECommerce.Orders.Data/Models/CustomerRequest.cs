@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SSE.ECommerce.Orders.Data.DTO
+namespace SSE.ECommerce.Orders.Data.Models
 {
     public class CustomerRequest
     {

@@ -42,7 +42,9 @@ namespace SSE.ECommerce.Orders
 
             // Configure DI
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICustomerManager, CustomerManager>();
+            services.AddScoped<IOrderManager, OrderManager>();
             services.AddScoped<IMostRecentOrderSummaryProxy, MostRecentOrderSummaryProxy>();
 
             services.AddControllers();
