@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using SSE.ECommerce.Orders.Domain.Interfaces;
 using SSE.ECommerce.Orders.Domain.Models;
 using System.Threading.Tasks;
@@ -19,37 +18,41 @@ namespace SSE.ECommerce.Orders.Domain.Managers
             _logger = logger;
         }
 
-        public async Task<OrderDetails> GetOrderDetails(string customerId, int limit)
+        public async Task<OrderDetails> GetOrderDetails(string customerId)
         {
-            var orderDetails = await _orderService.GetOrderDetails(customerId, limit);
+            _logger.LogInformation("Start of GetOrderDetails()");
+            var orderDetails = await _orderService.GetOrderDetails(customerId);
             return new OrderDetails
             {
-                Orders = (from order in orderDetails.Orders select new Order() {
-                    OrderId = order.OrderId,
-                    CustomerId = order.CustomerId,
-                    OrderDate = order.OrderDate,
-                    DeliveryExpected = order.DeliveryExpected,
-                    ContainsGift = order.ContainsGift,
-                    ShippingMode = order.ShippingMode,
-                    OrderSource = order.OrderSource
-                }).ToList(),
-                //OrderItems = (from orderItem in orderDetails.OrderItems select new OrderItem() {
-                //    OrderItemId = orderItem.OrderItemId,
-                //    OrderId = orderItem.OrderId,
-                //    ProductId = orderItem.ProductId,
-                //    Quantity = orderItem.Quantity,
-                //    Price = orderItem.Price,
-                //    Returnable = orderItem.Returnable
-                //}).ToList(),
-                //Products = (from product in orderDetails.Products select new Product() {
-                //    ProductId = product.ProductId,
-                //    ProductName = product.ProductName,
-                //    PackHeight = product.PackHeight,
-                //    PackWidth = product.PackWidth,
-                //    PackWeight = product.PackWeight,
-                //    Colour = product.Colour,
-                //    Size = product.Size
-                //}).ToList()
+                Order = orderDetails.Select(orderDetail => new Order()
+                  {
+                      OrderId = orderDetail.Order.OrderId,
+                      CustomerId = orderDetail.Order.CustomerId,
+                      OrderDate = orderDetail.Order.OrderDate,
+                      DeliveryExpected = orderDetail.Order.DeliveryExpected,
+                      ContainsGift = orderDetail.Order.ContainsGift,
+                      ShippingMode = orderDetail.Order.ShippingMode,
+                      OrderSource = orderDetail.Order.OrderSource
+                  }).FirstOrDefault(),
+                OrderItems = orderDetails.Select(orderDetail => new OrderItem()
+                  {
+                      OrderItemId = orderDetail.OrderItem.OrderItemId,
+                      OrderId = orderDetail.OrderItem.OrderId,
+                      ProductId = orderDetail.OrderItem.ProductId,
+                      Quantity = orderDetail.OrderItem.Quantity,
+                      Price = orderDetail.OrderItem.Price,
+                      Returnable = orderDetail.OrderItem.Returnable,
+                      Product = new Product
+                      {
+                          ProductId = orderDetail.Product.ProductId,
+                          ProductName = orderDetail.Order.ContainsGift ? "Gift" : orderDetail.Product.ProductName,
+                          PackHeight = orderDetail.Product.PackHeight,
+                          PackWidth = orderDetail.Product.PackWidth,
+                          PackWeight = orderDetail.Product.PackWeight,
+                          Colour = orderDetail.Product.Colour,
+                          Size = orderDetail.Product.Size
+                      }
+                  }).ToList()
             };
         }
     }

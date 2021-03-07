@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SSE.ECommerce.Orders.Data.DTO;
@@ -18,7 +19,7 @@ namespace SSE.ECommerce.Orders.Data.Services
             EnsureDbConnectionIsOpen();
         }
 
-        public async Task<OrderDetailsDto> GetOrderDetails(string customerId, int limit)
+        public async Task<List<OrderDetailsDto>> GetOrderDetails(string customerId)
         {
             _logger.LogInformation($"About to query database for {customerId}");
             var query = @"SELECT
@@ -32,9 +33,10 @@ namespace SSE.ECommerce.Orders.Data.Services
                 o.[ORDERSOURCE],
                 i.[ORDERITEMID],
                 i.[ORDERID],
+                i.[PRODUCTID],
                 i.[QUANTITY],
                 i.[PRICE],
-                i.[RETURNABLE]
+                i.[RETURNABLE],
                 p.[PRODUCTID],
                 p.[PRODUCTNAME],
                 p.[PACKHEIGHT],
@@ -45,21 +47,21 @@ namespace SSE.ECommerce.Orders.Data.Services
                 FROM [ORDERS] o
                 LEFT OUTER JOIN [ORDERITEMS] i ON o.[ORDERID] = i.[ORDERID]
                 LEFT OUTER JOIN [PRODUCTS] p ON i.[PRODUCTID] = p.[PRODUCTID]
-                WHERE [CUSTOMERID] = @customerId
-                ORDER BY [ORDERDATE] DESC";
+                WHERE [CUSTOMERID] = @customerId 
+                AND o.[ORDERID] = (SELECT TOP 1 [ORDERID] FROM [ORDERS] WHERE [CUSTOMERID] = @customerId ORDER BY [ORDERDATE] DESC)";
 
-            var results = await DbConnection.QueryAsync<OrderDetailsDto, List<OrderDto>, List<OrderItemDto>, List<ProductDto>, OrderDetailsDto>(query,
-                (orderdetails, orders, orderitems, products) =>
+            var results = await DbConnection.QueryAsync<OrderDetailsDto, OrderDto, OrderItemDto, ProductDto, OrderDetailsDto>(query,
+                (orderdetails, order, orderitem, product) =>
                 {
-                    orderdetails.Orders = orders;
-                    orderdetails.OrderItems = orderitems;
-                    orderdetails.Products = products;
+                    orderdetails.Order = order;
+                    orderdetails.OrderItem = orderitem;
+                    orderdetails.Product = product;
                     return orderdetails;
                 }, new
                 {
                     customerId
-                }, splitOn: "Id,OrderId,OrderItemId");
-            return new OrderDetailsDto();
+                }, splitOn: "Id,OrderId,OrderItemId,ProductId");
+             return results.ToList();
         }
     }
 }

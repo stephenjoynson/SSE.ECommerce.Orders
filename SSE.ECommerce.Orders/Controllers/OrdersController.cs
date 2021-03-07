@@ -25,7 +25,7 @@ namespace SSE.ECommerce.Orders.Controllers
         public OrderSummaryResponse MostRecentOrderSummary([FromBody] OrderRequest orderRequest)
         {
             _logger.LogInformation("Start of MostRecentOrderSummary()");
-            return _mostRecentOrderSummaryProxy.GetMostRecentOrderSummary(orderRequest);
+            return _mostRecentOrderSummaryProxy.GetMostRecentOrderSummary(orderRequest).Result;
         }
     }
 }

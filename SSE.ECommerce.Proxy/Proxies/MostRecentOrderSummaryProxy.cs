@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SSE.ECommerce.Orders.Domain.Interfaces;
 using SSE.ECommerce.Orders.Proxy.Interfaces;
@@ -19,11 +23,13 @@ namespace SSE.ECommerce.Orders.Proxy.Proxies
             _logger = logger;
         }
 
-        public OrderSummaryResponse GetMostRecentOrderSummary(OrderRequest orderRequest)
+        public async Task<OrderSummaryResponse> GetMostRecentOrderSummary(OrderRequest orderRequest)
         {
             _logger.LogInformation("Start of GetMostRecentOrderSummary()");
-            var customer = Task.Run(() => _customerManager.GetCustomerDetails(orderRequest.User)).Result;
-            var orderDetails = Task.Run(() => _orderManager.GetOrderDetails(orderRequest.CustomerId, 1)).Result;
+
+            var customer = await _customerManager.GetCustomerDetails(orderRequest.User);
+            var orderDetails = await _orderManager.GetOrderDetails(orderRequest.CustomerId);
+            var order = orderDetails.Order;
 
             return new OrderSummaryResponse
             {
@@ -31,6 +37,19 @@ namespace SSE.ECommerce.Orders.Proxy.Proxies
                 {
                     FirstName = customer.FirstName,
                     LastName = customer.LastName
+                },
+                Order = new Order
+                {
+                    OrderNumber = order.OrderId,
+                    OrderDate = order.OrderDate.ToString("dd-MMM-yyyy"),
+                    DeliveryAddress = $"{customer.HouseNumber} {customer.Street}, {customer.Town}, {customer.Postcode}",
+                    OrderItems = (from orderItem in orderDetails.OrderItems select new OrderItem()
+                    {
+                        Product = orderItem.Product.ProductName,
+                        Quantity = orderItem.Quantity,
+                        PriceEach = orderItem.Price
+                    }).ToList(),
+                    DeliveryExpected = order.DeliveryExpected.ToString("dd-MMM-yyyy")
                 }
             };
         }

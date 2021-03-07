@@ -5,6 +5,6 @@ namespace SSE.ECommerce.Orders.Domain.Interfaces
 {
     public interface IOrderManager
     {
-        Task<OrderDetails> GetOrderDetails(string customerId, int limit);
+        Task<OrderDetails> GetOrderDetails(string customerId);
     }
 }
