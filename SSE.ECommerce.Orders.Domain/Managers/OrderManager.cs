@@ -33,23 +33,23 @@ namespace SSE.ECommerce.Orders.Domain.Managers
                     ShippingMode = order.ShippingMode,
                     OrderSource = order.OrderSource
                 }).ToList(),
-                OrderItems = (from orderItem in orderDetails.OrderItems select new OrderItem() {
-                    OrderItemId = orderItem.OrderItemId,
-                    OrderId = orderItem.OrderId,
-                    ProductId = orderItem.ProductId,
-                    Quantity = orderItem.Quantity,
-                    Price = orderItem.Price,
-                    Returnable = orderItem.Returnable
-                }).ToList(),
-                Products = (from product in orderDetails.Products select new Product() {
-                    ProductId = product.ProductId,
-                    ProductName = product.ProductName,
-                    PackHeight = product.PackHeight,
-                    PackWidth = product.PackWidth,
-                    PackWeight = product.PackWeight,
-                    Colour = product.Colour,
-                    Size = product.Size
-                }).ToList()
+                //OrderItems = (from orderItem in orderDetails.OrderItems select new OrderItem() {
+                //    OrderItemId = orderItem.OrderItemId,
+                //    OrderId = orderItem.OrderId,
+                //    ProductId = orderItem.ProductId,
+                //    Quantity = orderItem.Quantity,
+                //    Price = orderItem.Price,
+                //    Returnable = orderItem.Returnable
+                //}).ToList(),
+                //Products = (from product in orderDetails.Products select new Product() {
+                //    ProductId = product.ProductId,
+                //    ProductName = product.ProductName,
+                //    PackHeight = product.PackHeight,
+                //    PackWidth = product.PackWidth,
+                //    PackWeight = product.PackWeight,
+                //    Colour = product.Colour,
+                //    Size = product.Size
+                //}).ToList()
             };
         }
     }

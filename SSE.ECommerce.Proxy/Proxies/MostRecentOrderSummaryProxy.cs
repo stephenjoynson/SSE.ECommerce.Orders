@@ -24,6 +24,7 @@ namespace SSE.ECommerce.Orders.Proxy.Proxies
             _logger.LogInformation("Start of GetMostRecentOrderSummary()");
             var customer = Task.Run(() => _customerManager.GetCustomerDetails(orderRequest.User)).Result;
             var orderDetails = Task.Run(() => _orderManager.GetOrderDetails(orderRequest.CustomerId, 1)).Result;
+
             return new OrderSummaryResponse
             {
                 Customer = new Customer

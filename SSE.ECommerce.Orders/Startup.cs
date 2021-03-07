@@ -1,4 +1,6 @@
 using System;
+using System.Data;
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +43,8 @@ namespace SSE.ECommerce.Orders
             //.AddPolicyHandler(GetCircuitBreakerPolicy());
 
             // Configure DI
+            services.AddTransient<IDbConnection>(db => new SqlConnection(
+                ordersSettings.DbConnectionString));
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICustomerManager, CustomerManager>();
