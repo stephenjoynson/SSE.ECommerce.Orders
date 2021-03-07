@@ -57,6 +57,18 @@ namespace SSE.ECommerce.Orders.Test.Domain
         }
 
         [Test]
+        public void When_Email_Is_Supplied__Then_GetCustomerDetails_Calls_Service_Once()
+        {
+            // Arrange
+
+            // Act
+            _customerManager.GetCustomerDetails(Email);
+
+            // Assert
+            _mockCustomerService.Verify(m => m.GetCustomerDetails(Email), Times.Once);
+        }
+
+        [Test]
         public void When_Email_Is_Supplied__Then_GetCustomerDetails_Returns_Customer()
         {
             // Arrange
