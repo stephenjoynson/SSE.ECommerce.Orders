@@ -36,7 +36,6 @@ namespace SSE.ECommerce.Orders
             services.AddHttpClient<ICustomerService, CustomerService>("Customer", client =>
             {
                 client.BaseAddress = new Uri(ordersSettings.CustomerApiUrl);
-                client.DefaultRequestHeaders.Add("code", ordersSettings.CustomerApiKey);
             });
             //.AddPolicyHandler(GetRetryPolicy())
             //.AddPolicyHandler(GetCircuitBreakerPolicy());

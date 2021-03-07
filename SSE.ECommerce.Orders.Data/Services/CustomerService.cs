@@ -10,9 +10,9 @@ namespace SSE.ECommerce.Orders.Data.Services
     public class CustomerService : ICustomerService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger _logger;
+        private readonly ILogger<CustomerService> _logger;
 
-        public CustomerService(IHttpClientFactory httpClientFactory, ILogger logger)
+        public CustomerService(IHttpClientFactory httpClientFactory, ILogger<CustomerService> logger)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
@@ -22,10 +22,16 @@ namespace SSE.ECommerce.Orders.Data.Services
         {
             _logger.LogInformation($"About to call Customer API for {email}");
             var customerClient = _httpClientFactory.CreateClient("Customer");
-            var httpRequestMessage = new HttpRequestMessage();
-            var httpResponseMessage = await customerClient.SendAsync(httpRequestMessage);
-            var customerDetails = JsonConvert.DeserializeObject<CustomerDto>(httpResponseMessage.Content.ToString());
+            var requestUri = "api/GetUserDetails?code=uu2ToG/dcsg3DI8CGlpLro1PyLhZNUWHpdPv8VmWFLBaxM0fvUZvkA==";
+            var customerRequest = new CustomerRequest
+            {
+                Email = email
+            };
+            var httpResponseMessage = await customerClient.PostAsync(requestUri, new StringContent(JsonConvert.SerializeObject(customerRequest)));
+            var httpResponseString = await httpResponseMessage.Content.ReadAsStringAsync();
+            var customerDetails = JsonConvert.DeserializeObject<CustomerDto>(httpResponseString);
             return customerDetails;
         }
+
     }
 }

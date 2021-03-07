@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SSE.ECommerce.Orders.Domain\SSE.ECommerce.Orders.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
