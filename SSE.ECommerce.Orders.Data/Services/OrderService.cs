@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +22,11 @@ namespace SSE.ECommerce.Orders.Data.Services
 
         public async Task<List<OrderDetailsDto>> GetOrderDetails(string customerId)
         {
+            if (string.IsNullOrWhiteSpace(customerId))
+            {
+                throw new ArgumentNullException(nameof(customerId), "No value supplied for argument");
+            }
+
             _logger.LogInformation($"About to query database for {customerId}");
             var query = @"SELECT
                 o.[ORDERID] As Id,

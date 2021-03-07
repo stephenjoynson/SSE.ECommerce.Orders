@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SSE.ECommerce.Orders.Data.Interfaces;
 using SSE.ECommerce.Orders.Domain.Interfaces;
@@ -19,6 +20,11 @@ namespace SSE.ECommerce.Orders.Domain.Managers
 
         public async Task<Customer> GetCustomerDetails(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email), "No value supplied for argument");
+            }
+
             _logger.LogInformation("Start of GetCustomerDetails()");
             var customerDetails = await _customerService.GetCustomerDetails(email);
             return new Customer

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,11 @@ namespace SSE.ECommerce.Orders.Data.Services
 
         public async Task<CustomerDto> GetCustomerDetails(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email), "No value supplied for argument");
+            }
+
             _logger.LogInformation($"About to call Customer API for {email}");
             var customerClient = _httpClientFactory.CreateClient("Customer");
             var requestUri = $"api/GetUserDetails?code={_configuration["OrdersSettings:CustomerApiKey"]}";
