@@ -41,6 +41,48 @@ namespace SSE.ECommerce.Orders.Test.Domain
             }
         };
 
+        private static readonly List<OrderDetailsDto> OrderDetailsForGift = new List<OrderDetailsDto>
+        {
+            new OrderDetailsDto
+            {
+                Order = new OrderDto
+                {
+                    OrderId = 123,
+                    CustomerId = CustomerId,
+                    ContainsGift = true
+                },
+                OrderItem = new OrderItemDto
+                {
+                    OrderItemId = 567,
+                    Quantity = 5
+                },
+                Product = new ProductDto
+                {
+                    ProductId = 890,
+                    ProductName = "Book"
+                }
+            },
+            new OrderDetailsDto
+            {
+                Order = new OrderDto
+                {
+                    OrderId = 123,
+                    CustomerId = CustomerId,
+                    ContainsGift = true
+                },
+                OrderItem = new OrderItemDto
+                {
+                    OrderItemId = 891,
+                    Quantity = 2
+                },
+                Product = new ProductDto
+                {
+                    ProductId = 891,
+                    ProductName = "Paper"
+                }
+            }
+        };
+
         [SetUp]
         public void SetUp()
         {
@@ -94,6 +136,19 @@ namespace SSE.ECommerce.Orders.Test.Domain
                 Assert.AreEqual(expected.Product.ProductId, customerManagerResponse.OrderItems.First().Product.ProductId);
                 Assert.AreEqual(expected.Product.ProductName, customerManagerResponse.OrderItems.First().Product.ProductName);
             });
+        }
+
+        [Test]
+        public void When_Order_Contains_Gift__Then_GetOrderDetails_Returns_OrderDetails_With_Gift_For_All_ProductNames()
+        {
+            // Arrange
+            _mockOrderService.Setup(m => m.GetOrderDetails(CustomerId)).ReturnsAsync(OrderDetailsForGift);
+
+            // Act
+            var customerManagerResponse = _orderManager.GetOrderDetails(CustomerId).Result;
+
+            // Assert
+            Assert.IsTrue(customerManagerResponse.OrderItems.All(i => string.Compare(i.Product.ProductName, "Gift", StringComparison.CurrentCultureIgnoreCase) == 0));
         }
     }
 }

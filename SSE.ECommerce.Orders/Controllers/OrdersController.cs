@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SSE.ECommerce.Orders.Proxy.Interfaces;
 using SSE.ECommerce.Orders.Proxy.Models;
@@ -25,15 +26,24 @@ namespace SSE.ECommerce.Orders.Controllers
         public IActionResult MostRecentOrderSummary([FromBody] OrderRequest orderRequest)
         {
             _logger.LogInformation("Start of MostRecentOrderSummary()");
-            var response = _mostRecentOrderSummaryProxy.GetMostRecentOrderSummary(orderRequest).Result;
 
-            if (response.Customer.CustomerId == orderRequest.CustomerId)
+            try
             {
-                return Ok(response);
-            }
+                var response = _mostRecentOrderSummaryProxy.GetMostRecentOrderSummary(orderRequest).Result;
 
-            _logger.LogWarning($"Bad Request for {orderRequest.User} {orderRequest.CustomerId}");
-            return BadRequest();
+                if (response.Customer.CustomerId == orderRequest.CustomerId)
+                {
+                    return Ok(response);
+                }
+
+                _logger.LogWarning($"Bad Request for {orderRequest.User} {orderRequest.CustomerId}");
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception for {orderRequest.User} {orderRequest.CustomerId}", ex);
+                return Problem(title: "There was a problem with your request");
+            }
         }
     }
 }

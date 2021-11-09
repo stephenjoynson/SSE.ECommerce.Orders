@@ -38,6 +38,7 @@ namespace SSE.ECommerce.Orders.Data.Services
                 Email = email
             };
             var httpResponseMessage = await customerClient.PostAsync(requestUri, new StringContent(JsonConvert.SerializeObject(customerRequest)));
+            httpResponseMessage.EnsureSuccessStatusCode();
             var httpResponseString = await httpResponseMessage.Content.ReadAsStringAsync();
             var customerDetails = JsonConvert.DeserializeObject<CustomerDto>(httpResponseString);
             return customerDetails;
